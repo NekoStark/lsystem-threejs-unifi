@@ -26,7 +26,6 @@ function Rewriter(rules) {
 }
 
 function stochasticRule(rules) {
-  console.log('ciao')
   var probability = rules.length;
   var choice = parseInt( (((Math.random() * probability) + 1) * 1000) / 1000 ) - 1;
 

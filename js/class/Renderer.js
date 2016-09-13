@@ -1,8 +1,8 @@
-function Renderer(object) {
+function Renderer() {
   //init renderer
   var renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize( window.innerWidth, window.innerHeight );
-  document.body.appendChild( renderer.domElement );
+  $("#canvas-div").append( renderer.domElement );
 
   //init scene & camera
   var scene = new THREE.Scene();
@@ -42,12 +42,10 @@ function Renderer(object) {
   var skyMaterial = new THREE.MultiMaterial( materials );
 
   var skyGeometry = new THREE.CubeGeometry( 4000, 4000, 4000 );
-  // var skyBox = new THREE.Mesh( skyGeometry, new THREE.MeshBasicMaterial( {color: 0x99ffff, side: THREE.BackSide}) );
   var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
 	scene.add( skyBox );
 
-
-  scene.add(object);
+  this.scene = scene;
   animate();
 
   //animate
@@ -61,4 +59,5 @@ function Renderer(object) {
   function render() {
     renderer.render( scene, camera );
   }
+
 }

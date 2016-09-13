@@ -57,7 +57,6 @@ function TreeBuilder(string, params) {
     }
 
     return tree;
-
   }
 
 }
