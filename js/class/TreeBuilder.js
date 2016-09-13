@@ -17,14 +17,17 @@ function TreeBuilder(string, params) {
 
     //init object
     var tree = new THREE.Object3D();
+    var textureLoader = new THREE.TextureLoader();
+    var branchMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/branch.jpg" )} );
+    var appleMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/apple.jpg" )} );
 
     for(var i = 0; i < this.string.length; i++) {
       var char = this.string.charAt(i);
       if(char == "F") {
-        tree.add(buildBranch(state, new THREE.MeshBasicMaterial( {color: 'black'} ) ));
+        tree.add(buildBranch(state, branchMaterial));
       }
       if(char == "X") {
-        tree.add(buildLeaf(state, new THREE.MeshBasicMaterial( {color: 'red'} ) ));
+        tree.add(buildLeaf(state, appleMaterial ));
       }
       if(char == "+") {
         state.rotation.multiply( new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(0, 0, 1), this.params.delta * Math.PI/180 ) );
@@ -85,6 +88,7 @@ function buildLeaf(state, material) {
   var transform = new THREE.Quaternion();
   transform.multiply( state.rotation );
 
+  var originalPosition = new THREE.Vector3().copy(state.position);
   var position = new THREE.Vector3( 0, state.bLength/8, 0.0 );
   position.applyQuaternion( state.rotation );
   state.position.add( position );
@@ -94,7 +98,7 @@ function buildLeaf(state, material) {
   branch.quaternion.copy( state.rotation );
   branch.position.copy( state.position );
 
-  state.position.add( new THREE.Vector3( 0, -state.bLength/8, 0.0 ) );
+  state.position = new THREE.Vector3().copy( originalPosition );
 
   return branch;
 }

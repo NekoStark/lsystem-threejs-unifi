@@ -23,7 +23,7 @@
   // var rules = { "X" : "F[+X]F[-X]+X", "F" : "FF"  }; //D
   // var rules = { "X" : "F[+X][-X]FX", "F" : "FF"  }; //E
   // var rules = { "X" : "F-[[X]+X]+F[+FX]-X", "F" : "FF"  }; //F
-  var rules = { "A" : "FX[++A][--A]^^^A" }; //esempio web
+  var rules = { "A" : "F[++A]X[--A]^^^A" }; //esempio web
 
   var rewriter = new Rewriter(rules);
 
