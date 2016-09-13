@@ -9,7 +9,11 @@ function Rewriter(rules) {
         var char = result.charAt(j);
         var rule = this.rules[char];
         if(rule !== undefined) {
-          localResult += rule;
+            if(Array.isArray(rule)) {
+              localResult += stochasticRule(rule);
+            } else {
+              localResult += rule;
+            }
         } else {
           localResult += char;
         }
@@ -19,4 +23,12 @@ function Rewriter(rules) {
 		return result;
   };
 
+}
+
+function stochasticRule(rules) {
+  console.log('ciao')
+  var probability = rules.length;
+  var choice = parseInt( (((Math.random() * probability) + 1) * 1000) / 1000 ) - 1;
+
+  return rules[choice];
 }

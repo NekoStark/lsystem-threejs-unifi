@@ -16,14 +16,15 @@
   <script src="js/class/Renderer.js"></script>
 
   <script>
-  var params = new Params("FFFFFA", 5, 30);
+  var params = new Params("F", 5, 30);
   // var rules = { "F" : "F[+F]F[-F]F" }; //A
   // var rules = { "F" : "F[+F]F[-F][F]" }; //B
   // var rules = { "F" : "FF-[-F+F+F]+[+F-F-F]" }; //C (non ce la fa con 5)
   // var rules = { "X" : "F[+X]F[-X]+X", "F" : "FF"  }; //D
   // var rules = { "X" : "F[+X][-X]FX", "F" : "FF"  }; //E
   // var rules = { "X" : "F-[[X]+X]+F[+FX]-X", "F" : "FF"  }; //F
-  var rules = { "A" : "F[++A]X[--A]^^^A" }; //esempio web
+  // var rules = { "A" : "F[++A]X[--A]^^^A" }; //esempio web
+  var rules = { "F" : [ "F[+F]F[-F]F", "F[+F]F", "F[-F]F"] }; //regole stocastiche con pesi uguali
 
   var rewriter = new Rewriter(rules);
 

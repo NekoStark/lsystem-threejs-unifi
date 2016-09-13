@@ -12,16 +12,17 @@ function Renderer(object) {
 
   //init controls
   var controls = new THREE.OrbitControls( camera, renderer.domElement );
-  controls.maxDistance = camera.far/2;
-  controls.maxPolarAngle = 120 * Math.PI/180;
+  controls.maxDistance = camera.far/16;
+  controls.minDistance = camera.near*100;
+  controls.maxPolarAngle = 80 * Math.PI/180;
 
   //FIELD
   var textureLoader = new THREE.TextureLoader();
-  var fieldGeometry = new THREE.CircleGeometry( 250, 16 );
-  var texture = textureLoader.load( "textures/grass.png" );
+  var fieldGeometry = new THREE.CircleGeometry( 2000, 16 );
+  var texture = textureLoader.load( "textures/grass.jpg" );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set( 20, 20 );
+  texture.repeat.set( 500, 500 );
 
   var plane = new THREE.Mesh( fieldGeometry,
     new THREE.MeshBasicMaterial( {color: 'green', side: THREE.DoubleSide, map: texture} ) );
