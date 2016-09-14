@@ -25,7 +25,7 @@
       Branch Length: <input id="branchLength" name="branchLength" type="number" value="3"></input><br/>
       Branch Radius: <input id="branchRadius" name="branchRadius" type="number" value="1"></input><br/>
     </form>
-    <a onclick="render()">Render</a>
+    <a onclick="render()">Build</a>
   </div>
   <div id="canvas-div"></div>
   <script src="js/lib/jquery.js"></script>
@@ -39,7 +39,8 @@
   <script>
   var renderer = new Renderer();
   var rules, params, tree;
-  initParamsAndRules();
+  //initParamsAndRules();
+  selectPreset()
   render();
 
   function initParamsAndRules() {
@@ -72,15 +73,15 @@
   function selectPreset() {
     var preset = $("#preset").val();
     if(preset == "Example A") {
-      params = new Params("F", 5, 25.7);
+      params = new Params("F", 5, 25.7, 5, 1, 0.2, 0.2);
       rules = { "F" : "F[+F]F[-F]F" };
     }
     if(preset == "Example B") {
-      params = new Params("F", 5, 20);
+      params = new Params("F", 5, 20, 4, 0.2);
       rules = { "F" : "F[+F]F[-F][F]" };
     }
     if(preset == "Example C") {
-      params = new Params("F", 4, 22.5);
+      params = new Params("F", 4, 22.5, 4, 0.1);
       rules = { "F" : "FF-[-F+F+F]+[+F-F-F]" };
     }
     if(preset == "Example D") {
@@ -100,7 +101,7 @@
       rules = { "A" : "F[++A]X[--A]^^^A" };
     }
     if(preset == "Example S") {
-      params = new Params("F", 5, 25);
+      params = new Params("F", 5, 25, 3, 0.3);
       rules = { "F" : [ "F[+F]F[-F]F", "F[+F]F", "F[-F]F"] };
     }
   }

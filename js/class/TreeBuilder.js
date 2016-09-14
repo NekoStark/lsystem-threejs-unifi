@@ -7,6 +7,8 @@ function TreeBuilder(string, params) {
     var state = {
       bRadius : this.params.branchRadius,
       bLength : this.params.branchLength,
+      bReduction : this.params.branchReduction,
+      bMinRadius : this.params.branchMinRadius,
       position : new THREE.Vector3( 0, 0, 0 ),
       rotation : new THREE.Quaternion()
     }
@@ -46,6 +48,7 @@ function TreeBuilder(string, params) {
       }
       if(char == "[") {
         stateStack.push( cloneState(state) );
+        state.bRadius = (state.bRadius - state.bReduction) > state.bMinRadius ? (state.bRadius - state.bReduction) : state.bRadius;
       }
       if(char == "]") {
         state = cloneState( stateStack.pop() );
@@ -99,6 +102,8 @@ function cloneState(state) {
   return {
     bRadius : state.bRadius,
     bLength : state.bLength,
+    bReduction : state.bReduction,
+    bMinRadius : state.bMinRadius,
     position : new THREE.Vector3().copy(state.position),
     rotation : new THREE.Quaternion().copy(state.rotation)
   }
