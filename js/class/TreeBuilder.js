@@ -7,9 +7,6 @@ function TreeBuilder(string, params) {
     var state = {
       bRadius : this.params.branchRadius,
       bLength : this.params.branchLength,
-      bReductionStep : this.params.branchReduction,
-      bReduction : this.params.branchReduction,
-      bMinSize : this.params.branchMinSize,
       position : new THREE.Vector3( 0, 0, 0 ),
       rotation : new THREE.Quaternion()
     }
@@ -69,15 +66,11 @@ function buildBranch(state, material) {
   position.applyQuaternion( state.rotation );
   state.position.add( position );
 
-  var newReduction = (state.bRadius - (state.bReduction + state.bReductionStep)) > state.bMinSize ?
-            state.bReduction + state.bReductionStep : state.bReduction;
-
-  var geometry = new THREE.CylinderGeometry( state.bRadius - newReduction, state.bRadius - state.bReduction, state.bLength, 16 );
+  var geometry = new THREE.CylinderGeometry( state.bRadius, state.bRadius, state.bLength, 16 );
   var branch = new THREE.Mesh( geometry, material );
   branch.quaternion.copy( state.rotation );
   branch.position.copy( state.position );
 
-  state.bReduction = newReduction;
   state.position.add(position);
   return branch;
 
@@ -106,9 +99,6 @@ function cloneState(state) {
   return {
     bRadius : state.bRadius,
     bLength : state.bLength,
-    bReductionStep : state.bReductionStep,
-    bReduction : state.bReduction,
-    bMinSize : state.bMinSize,
     position : new THREE.Vector3().copy(state.position),
     rotation : new THREE.Quaternion().copy(state.rotation)
   }
