@@ -1,4 +1,4 @@
-function TreeBuilder(string, params) {
+function TreeBuilder(string, params, startingPosition) {
   this.string = string;
   this.params = params;
 
@@ -9,7 +9,7 @@ function TreeBuilder(string, params) {
       bLength : this.params.branchLength,
       bReduction : this.params.branchReduction,
       bMinRadius : this.params.branchMinRadius,
-      position : new THREE.Vector3( 0, 0, 0 ),
+      position : startingPosition ? startingPosition : new THREE.Vector3( 0, 0, 0 ),
       rotation : new THREE.Quaternion()
     }
     var stateStack = [];
@@ -17,8 +17,10 @@ function TreeBuilder(string, params) {
     //init object
     var tree = new THREE.Object3D();
     var textureLoader = new THREE.TextureLoader();
-    var branchMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/branch.jpg" )} );
-    var appleMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/apple.jpg" )} );
+    var branchMaterial = new THREE.MeshPhongMaterial( {color: 'black'} );
+    var appleMaterial = new THREE.MeshBasicMaterial( {color: 'red'} );
+    // var branchMaterial = new THREE.MeshPhongMaterial( {color: 'white', map: textureLoader.load( "textures/branch.jpg" )} );
+    // var appleMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/apple.jpg" )} );
 
     for(var i = 0; i < this.string.length; i++) {
       var char = this.string.charAt(i);
@@ -55,7 +57,7 @@ function TreeBuilder(string, params) {
       }
 
     }
-
+    tree.castShadow = true;
     return tree;
   }
 
@@ -69,12 +71,13 @@ function buildBranch(state, material) {
   position.applyQuaternion( state.rotation );
   state.position.add( position );
 
-  var geometry = new THREE.CylinderGeometry( state.bRadius, state.bRadius, state.bLength, 16 );
+  var geometry = new THREE.CylinderBufferGeometry( state.bRadius, state.bRadius, state.bLength, 16 );
   var branch = new THREE.Mesh( geometry, material );
   branch.quaternion.copy( state.rotation );
   branch.position.copy( state.position );
 
   state.position.add(position);
+  branch.castShadow = true;
   return branch;
 
 }
@@ -88,13 +91,13 @@ function buildLeaf(state, material) {
   position.applyQuaternion( state.rotation );
   state.position.add( position );
 
-  var geometry = new THREE.SphereGeometry( state.bLength/4, 16 );
+  var geometry = new THREE.SphereBufferGeometry( state.bLength/4, 16 );
   var branch = new THREE.Mesh( geometry, material );
   branch.quaternion.copy( state.rotation );
   branch.position.copy( state.position );
 
   state.position = new THREE.Vector3().copy( originalPosition );
-
+  branch.castShadow = true;
   return branch;
 }
 

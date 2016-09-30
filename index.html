@@ -7,6 +7,7 @@
 </head>
 <body>
   <div id="control-panel">
+    <span>Preset:</span>
     <select id="preset" onchange="selectPreset();">
       <option value="Example A">Example A</option>
       <option value="Example B">Example B</option>
@@ -15,16 +16,28 @@
       <option value="Example E">Example E</option>
       <option value="Example F">Example F</option>
       <option value="Example G">Example G</option>
-      <option value="Example S">Example S</option>
-    </select><br /><br />
-    <form style="visibility: hidden; display:none;">
-      Axiom: <input id="axiom" name="axiom" type="text" value="F"></input><br/>
-      Rules: <textarea id="rules" name="rules">F=F[+F]F[-F]F</textarea><br/>
-      Iterations: <input id="iterations" name="iterations" type="number" value="5"></input><br/>
-      Delta: <input id="delta" name="delta" type="number" value="30"></input><br/>
-      Branch Length: <input id="branchLength" name="branchLength" type="number" value="3"></input><br/>
-      Branch Radius: <input id="branchRadius" name="branchRadius" type="number" value="1"></input><br/>
+      <!-- <option value="Example S">Example S</option> -->
+    </select><hr />
+    <form>
+      <span>Axiom</span> <input id="axiom" name="axiom" type="text"></input><br/>
+      <span>Rules</span> <textarea id="rules" name="rules" rows="5"></textarea><br/>
+      <span>Iterations</span> <input id="iterations" name="iterations" type="number"></input><br/>
+      <span>Delta</span> <input id="delta" name="delta" type="number"></input><br/>
+      <div style="visibility: hidden; display:none;">
+        Branch Length <input id="branchLength" name="branchLength" type="number"</input><br/>
+        Branch Radius <input id="branchRadius" name="branchRadius" type="number"></input><br/>
+        Branch Reduction <input id="branchReduction" name="branchReduction" type="number"></input><br/>
+        Branch Min Radius <input id="branchMinRadius" name="branchMinRadius" type="number"></input><br/>
+      </div>
     </form>
+    <span>Position</span>
+    <select id="position">
+      <option value="center" selected>Center</option>
+      <option value="left">Left</option>
+      <option value="right">Right</option>
+      <!-- <option value="far">Far</option>
+      <option value="near">Near</option> -->
+    </select>
     <a onclick="render()">Build</a>
   </div>
   <div id="canvas-div"></div>
@@ -38,26 +51,50 @@
 
   <script>
   var renderer = new Renderer();
-  var rules, params, tree;
-  //initParamsAndRules();
+  var rules, params, position;
+  var tree = [];
   selectPreset()
   render();
 
   function initParamsAndRules() {
     params = new Params($("#axiom").val(), $("#iterations").val(),
                         $("#delta").val(), $("#branchLength").val(),
-                        $("#branchRadius").val());
+                        $("#branchRadius").val(), $("#branchReduction").val(),
+                        $("#branchMinRadius").val());
     rules = parseRules($("#rules").val());
+
+    // console.log(params);
+    // console.log(rules);
+  }
+
+  function initPosition(selectedPosition) {
+    if(selectedPosition == "center") {
+      position = new THREE.Vector3(0, 0, 0);
+    }
+    if(selectedPosition == "left") {
+      position = new THREE.Vector3(-200, 0, 0);
+    }
+    if(selectedPosition == "right") {
+      position = new THREE.Vector3(200, 0, 0);
+    }
   }
 
   function render() {
-    renderer.scene.remove(tree);
+    var selectedPosition = $("#position").val();
+    initPosition(selectedPosition);
+    if(tree[selectedPosition] !== undefined) {
+      renderer.scene.remove( tree[selectedPosition] );
+    }
+
+    initParamsAndRules();
 
     var rewriter = new Rewriter(rules);
     var string = rewriter.rewrite(params);
-    tree = new TreeBuilder(string, params).build();
+    // console.log(string)
+    newTree = new TreeBuilder(string, params, position).build();
+    tree[selectedPosition] = newTree;
 
-    setTimeout(function(){renderer.scene.add(tree)}, 500);
+    renderer.scene.add(newTree);
   }
 
   function parseRules(rules) {
@@ -73,37 +110,47 @@
   function selectPreset() {
     var preset = $("#preset").val();
     if(preset == "Example A") {
-      params = new Params("F", 5, 25.7, 5, 1, 0.2, 0.2);
-      rules = { "F" : "F[+F]F[-F]F" };
+      params = new Params("F", 5, 20, 4, 0.2);
+      rules = "F=F[+F]F[-F][F]";
     }
     if(preset == "Example B") {
-      params = new Params("F", 5, 20, 4, 0.2);
-      rules = { "F" : "F[+F]F[-F][F]" };
+      params = new Params("F", 5, 25.7, 5, 1, 0.2, 0.2);
+      rules = "F=F[+F]F[-F]F";
     }
     if(preset == "Example C") {
       params = new Params("F", 4, 22.5, 4, 0.1);
-      rules = { "F" : "FF-[-F+F+F]+[+F-F-F]" };
+      rules = "F=FF-[-F+F+F]+[+F-F-F]";
     }
     if(preset == "Example D") {
       params = new Params("X", 7, 20);
-      rules = { "X" : "F[+X]F[-X]+X", "F" : "FF"  };
+      rules = "X=F[+X]F[-X]+X\nF=FF";
     }
     if(preset == "Example E") {
       params = new Params("X", 7, 25.7);
-      rules = { "X" : "F[+X][-X]FX", "F" : "FF"  };
+      rules = "X=F[+X][-X]FX\nF=FF";
     }
     if(preset == "Example F") {
       params = new Params("X", 5, 22.5);
-      rules = { "X" : "F-[[X]+X]+F[+FX]-X", "F" : "FF"  };
+      rules = "X=F-[[X]+X]+F[+FX]-X\nF=FF";
     }
     if(preset == "Example G") {
       params = new Params("FFFFFA", 4, 25);
-      rules = { "A" : "F[++A]X[--A]^^^A" };
+      rules = "A=F[++A]X[--A]^^^A";
     }
-    if(preset == "Example S") {
-      params = new Params("F", 5, 25, 3, 0.3);
-      rules = { "F" : [ "F[+F]F[-F]F", "F[+F]F", "F[-F]F"] };
-    }
+    //FIXME da riabilitare
+    // if(preset == "Example S") {
+    //   params = new Params("F", 5, 25, 3, 0.3);
+    //   rules = {"F" : [ "F[+F]F[-F]F", "F[+F]F", "F[-F]F"] };
+    // }
+
+    $("#axiom").val(params.axiom)
+    $("#rules").val(rules)
+    $("#iterations").val(params.iterations)
+    $("#delta").val(params.delta)
+    $("#branchLength").val(params.branchLength)
+    $("#branchRadius").val(params.branchRadius)
+    $("#branchReduction").val(params.branchReduction)
+    $("#branchMinRadius").val(params.branchMinRadius)
   }
   </script>
 </body>

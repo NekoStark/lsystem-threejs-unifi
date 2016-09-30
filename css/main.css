@@ -1,9 +1,7 @@
 body {
   margin: 0;
-}
-
-#preset {
-  background-color: white;
+  font: 11px BlinkMacSystemFont;
+  font-size: 0.8em;
 }
 
 #control-panel {
@@ -15,22 +13,65 @@ body {
   padding: 10px;
   right: 10px;
   top: 10px;
-  width: 100px;
-  height: 60px;
+  width: 250px;
+  height: 230px;
+}
+#control-panel span {
+  display: inline-block;
+  width: 70px;
+  margin-right: 4px;
+  text-align: right;
+  vertical-align: top;
+  padding-top: 4px;
+}
+
+#control-panel hr {
+  border: 1px solid #ccc;
+}
+
+#control-panel input,
+#control-panel textarea {
+  border: 1px solid #ccc;
+  padding: 6px 12px;
+  width: 140px;
+  resize: none;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+#control-panel select {
+  margin-top: 2px;
+  background-color: white;
 }
 
 #control-panel a {
-  border: 1px solid;
-  border-color: rgb(166, 166, 166);
-  background-color: white;
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74;
   padding: 4px 10px 4px 10px;
   cursor: pointer;
   border-radius: 4px;
-  font: 11px BlinkMacSystemFont;
-  font-size: 0.8em;
   cursor: pointer;
+  float: right;
+  margin-top: 5px;
 }
 
 #control-panel a:active {
   background-color: gray;
+}
+
+#loading-gif-div {
+  position: absolute;
+  background-color: white;
+  width: 100%;
+  opacity: 0.6;
+  text-align: center;
+  height: 100%;
+  top: 0;
+}
+
+#loading-gif-div img {
+  position: absolute;
+  top: 40%;
+  left: 40%;
 }

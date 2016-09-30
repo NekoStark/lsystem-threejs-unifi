@@ -2,6 +2,10 @@ function Renderer() {
   //init renderer
   var renderer = new THREE.WebGLRenderer({antialias:true});
   renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.gammaInput = true;
+  renderer.gammaOutput = true;
   $("#canvas-div").append( renderer.domElement );
 
   //init scene & camera
@@ -16,17 +20,35 @@ function Renderer() {
   controls.minDistance = camera.near*100;
   controls.maxPolarAngle = 80 * Math.PI/180;
 
+  //LIGHT
+  // var spotLight = new THREE.SpotLight( 0xffffff, 10 );
+  // spotLight.position.set( 0, 1500, 400 );
+  // spotLight.castShadow = true;
+  // spotLight.angle = Math.PI / 4;
+  // spotLight.distance = 2000;
+  // spotLight.shadow.mapSize.width = 1024;
+  // spotLight.shadow.mapSize.height = 1024;
+  // spotLight.shadow.camera.near = 500;
+  // spotLight.shadow.camera.far = 2000;
+  // scene.add(spotLight);
+  // var lightHelper = new THREE.SpotLightHelper( spotLight );
+  // scene.add(lightHelper)
+
+  scene.add( new THREE.AmbientLight(0xffffff) );
+
   //FIELD
   var textureLoader = new THREE.TextureLoader();
-  var fieldGeometry = new THREE.CircleGeometry( 2000, 16 );
+  var fieldGeometry = new THREE.CircleGeometry( 1000, 16 );
   var texture = textureLoader.load( "textures/grass.jpg" );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set( 500, 500 );
+  texture.repeat.set( 250, 250 );
 
   var plane = new THREE.Mesh( fieldGeometry,
-    new THREE.MeshBasicMaterial( {color: 'green', side: THREE.DoubleSide, map: texture} ) );
+    new THREE.MeshPhongMaterial( {color: 'green', side: THREE.DoubleSide, map: texture} ) );
   plane.quaternion.multiply( new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1, 0, 0), 90 * Math.PI/180 ) );
+  plane.receiveShadow = true;
+  plane.castShadow = false;
   scene.add( plane );
 
   //SKY
