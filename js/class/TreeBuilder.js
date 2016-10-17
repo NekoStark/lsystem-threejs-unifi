@@ -17,10 +17,10 @@ function TreeBuilder(string, params, startingPosition) {
     //init object
     var tree = new THREE.Object3D();
     var textureLoader = new THREE.TextureLoader();
-    var branchMaterial = new THREE.MeshPhongMaterial( {color: 'black'} );
-    var appleMaterial = new THREE.MeshBasicMaterial( {color: 'red'} );
-    // var branchMaterial = new THREE.MeshPhongMaterial( {color: 'white', map: textureLoader.load( "textures/branch.jpg" )} );
-    // var appleMaterial = new THREE.MeshBasicMaterial( {color: 'white', map: textureLoader.load( "textures/apple.jpg" )} );
+    // var branchMaterial = new THREE.MeshLambertMaterial( {color: 'black'} );
+    // var appleMaterial = new THREE.MeshLambertMaterial( {color: 'red'} );
+    var branchMaterial = new THREE.MeshBasicMaterial( {color: 'brown', map: textureLoader.load( "textures/branch.jpg" )} );
+    var appleMaterial = new THREE.MeshBasicMaterial( {color: 'red', map: textureLoader.load( "textures/apple.jpg" )} );
 
     for(var i = 0; i < this.string.length; i++) {
       var char = this.string.charAt(i);

@@ -21,16 +21,16 @@ function Renderer() {
   controls.maxPolarAngle = 80 * Math.PI/180;
 
   //LIGHT
-  // var spotLight = new THREE.SpotLight( 0xffffff, 10 );
-  // spotLight.position.set( 0, 1500, 400 );
-  // spotLight.castShadow = true;
-  // spotLight.angle = Math.PI / 4;
-  // spotLight.distance = 2000;
-  // spotLight.shadow.mapSize.width = 1024;
-  // spotLight.shadow.mapSize.height = 1024;
-  // spotLight.shadow.camera.near = 500;
-  // spotLight.shadow.camera.far = 2000;
-  // scene.add(spotLight);
+  var light = new THREE.DirectionalLight( 0xffffff, 1 );
+  light.position.set( 0, 150, 40 );
+  light.castShadow = true;
+  light.angle = Math.PI / 4;
+  light.distance = 2000;
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 1024;
+  light.shadow.camera.near = 10;
+  light.shadow.camera.far = 2000;
+  // scene.add(light);
   // var lightHelper = new THREE.SpotLightHelper( spotLight );
   // scene.add(lightHelper)
 
@@ -44,6 +44,7 @@ function Renderer() {
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set( 250, 250 );
 
+  // var plane = new THREE.Mesh( fieldGeometry, new THREE.MeshBasicMaterial( {color: 'green', side: THREE.DoubleSide} ) );
   var plane = new THREE.Mesh( fieldGeometry,
     new THREE.MeshPhongMaterial( {color: 'green', side: THREE.DoubleSide, map: texture} ) );
   plane.quaternion.multiply( new THREE.Quaternion().setFromAxisAngle( new THREE.Vector3(1, 0, 0), 90 * Math.PI/180 ) );
@@ -61,6 +62,7 @@ function Renderer() {
     new THREE.MeshBasicMaterial( { map: textureLoader.load( "textures/sky/zneg.png"), side: THREE.BackSide } )
   ];
 
+  // var skyMaterial = new THREE.MeshBasicMaterial( {color: 'aqua', side: THREE.BackSide} );
   var skyMaterial = new THREE.MultiMaterial( materials );
 
   var skyGeometry = new THREE.CubeGeometry( 4000, 4000, 4000 );

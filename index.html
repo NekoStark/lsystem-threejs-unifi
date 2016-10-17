@@ -90,7 +90,7 @@
 
     var rewriter = new Rewriter(rules);
     var string = rewriter.rewrite(params);
-    // console.log(string)
+    console.log(string)
     newTree = new TreeBuilder(string, params, position).build();
     tree[selectedPosition] = newTree;
 
