@@ -20,20 +20,7 @@ function Renderer() {
   controls.minDistance = camera.near*100;
   controls.maxPolarAngle = 80 * Math.PI/180;
 
-  //LIGHT
-  var light = new THREE.DirectionalLight( 0xffffff, 1 );
-  light.position.set( 0, 150, 40 );
-  light.castShadow = true;
-  light.angle = Math.PI / 4;
-  light.distance = 2000;
-  light.shadow.mapSize.width = 1024;
-  light.shadow.mapSize.height = 1024;
-  light.shadow.camera.near = 10;
-  light.shadow.camera.far = 2000;
-  // scene.add(light);
-  // var lightHelper = new THREE.SpotLightHelper( spotLight );
-  // scene.add(lightHelper)
-
+  //AMBIENT light
   scene.add( new THREE.AmbientLight(0xffffff) );
 
   //FIELD

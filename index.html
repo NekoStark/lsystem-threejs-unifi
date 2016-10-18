@@ -35,8 +35,12 @@
       <option value="center" selected>Center</option>
       <option value="left">Left</option>
       <option value="right">Right</option>
-      <!-- <option value="far">Far</option>
-      <option value="near">Near</option> -->
+    </select><br/>
+    <span>Lighting</span>
+    <select id="lighting" onchange="addLight();">
+      <option value="ambient" selected>Ambient</option>
+      <option value="directional">Directional</option>
+      <option value="spot">Spot</option>
     </select>
     <a onclick="render()">Build</a>
   </div>
@@ -53,8 +57,46 @@
   var renderer = new Renderer();
   var rules, params, position;
   var tree = [];
-  selectPreset()
+  var light, lightHelper;
+  selectPreset();
   render();
+  addLight();
+
+  function addLight() {
+    renderer.scene.remove(light)
+    // renderer.scene.remove(lightHelper)
+    if($("#lighting").val() == "directional") {
+      light = new THREE.DirectionalLight( 0xffffff, 1 );
+      light.position.set( 0, 60, 50 );
+      light.castShadow = true;
+      light.shadow.camera.near = 0.1;
+      light.shadow.camera.far = 2000;
+      light.shadow.camera.top = 200;
+      light.shadow.camera.left = -50;
+      light.shadow.camera.right = 50;
+      renderer.scene.add(light);
+      // lightHelper = new THREE.DirectionalLightHelper( light );
+      // renderer.scene.add(lightHelper)
+    }
+    if($("#lighting").val() == "spot") {
+      light = new THREE.SpotLight( 0xffffff, 1 );
+      light.position.set( 0, 150, 40 );
+      light.castShadow = true;
+      light.angle = Math.PI / 4;
+      light.distance = 2000;
+      light.shadow.mapSize.width = 1024;
+      light.shadow.mapSize.height = 1024;
+      light.shadow.camera.near = 10;
+      light.shadow.camera.far = 2000;
+      renderer.scene.add(light);
+      // lightHelper = new THREE.SpotLightHelper( light );
+      // renderer.scene.add(lightHelper)
+    }
+
+
+
+
+  }
 
   function initParamsAndRules() {
     params = new Params($("#axiom").val(), $("#iterations").val(),
