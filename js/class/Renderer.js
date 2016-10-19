@@ -21,7 +21,7 @@ function Renderer() {
   controls.maxPolarAngle = 80 * Math.PI/180;
 
   //AMBIENT light
-  scene.add( new THREE.AmbientLight(0xffffff) );
+  scene.add( new THREE.AmbientLight(0xffffff, 2) );
 
   //FIELD
   var textureLoader = new THREE.TextureLoader();

@@ -16,7 +16,7 @@
       <option value="Example E">Example E</option>
       <option value="Example F">Example F</option>
       <option value="Example G">Example G</option>
-      <!-- <option value="Example S">Example S</option> -->
+      <option value="Example S">Example S</option>
     </select><hr />
     <form>
       <span>Axiom</span> <input id="axiom" name="axiom" type="text"></input><br/>
@@ -60,43 +60,6 @@
   var light, lightHelper;
   selectPreset();
   render();
-  addLight();
-
-  function addLight() {
-    renderer.scene.remove(light)
-    // renderer.scene.remove(lightHelper)
-    if($("#lighting").val() == "directional") {
-      light = new THREE.DirectionalLight( 0xffffff, 1 );
-      light.position.set( 0, 60, 50 );
-      light.castShadow = true;
-      light.shadow.camera.near = 0.1;
-      light.shadow.camera.far = 2000;
-      light.shadow.camera.top = 200;
-      light.shadow.camera.left = -50;
-      light.shadow.camera.right = 50;
-      renderer.scene.add(light);
-      // lightHelper = new THREE.DirectionalLightHelper( light );
-      // renderer.scene.add(lightHelper)
-    }
-    if($("#lighting").val() == "spot") {
-      light = new THREE.SpotLight( 0xffffff, 1 );
-      light.position.set( 0, 150, 40 );
-      light.castShadow = true;
-      light.angle = Math.PI / 4;
-      light.distance = 2000;
-      light.shadow.mapSize.width = 1024;
-      light.shadow.mapSize.height = 1024;
-      light.shadow.camera.near = 10;
-      light.shadow.camera.far = 2000;
-      renderer.scene.add(light);
-      // lightHelper = new THREE.SpotLightHelper( light );
-      // renderer.scene.add(lightHelper)
-    }
-
-
-
-
-  }
 
   function initParamsAndRules() {
     params = new Params($("#axiom").val(), $("#iterations").val(),
@@ -143,7 +106,10 @@
     var result = {};
     rules.split("\n").forEach(function(a) {
       var line = a.split("=");
-      result[line[0]] = line[1];
+      if(!result[line[0]]) {
+        result[line[0]] = [];
+      }
+      result[line[0]].push(line[1])
     });
 
     return result;
@@ -179,11 +145,10 @@
       params = new Params("FFFFFA", 4, 25);
       rules = "A=F[++A]X[--A]^^^A";
     }
-    //FIXME da riabilitare
-    // if(preset == "Example S") {
-    //   params = new Params("F", 5, 25, 3, 0.3);
-    //   rules = {"F" : [ "F[+F]F[-F]F", "F[+F]F", "F[-F]F"] };
-    // }
+    if(preset == "Example S") {
+      params = new Params("F", 5, 25, 3, 0.3);
+      rules = "F=F[+F]F[-F]F\nF=F[+F]F\nF=F[-F]F";
+    }
 
     $("#axiom").val(params.axiom)
     $("#rules").val(rules)
@@ -193,6 +158,38 @@
     $("#branchRadius").val(params.branchRadius)
     $("#branchReduction").val(params.branchReduction)
     $("#branchMinRadius").val(params.branchMinRadius)
+  }
+
+  function addLight() {
+    renderer.scene.remove(light)
+    // renderer.scene.remove(lightHelper)
+    if($("#lighting").val() == "directional") {
+      light = new THREE.DirectionalLight( 0xffffff, 1 );
+      light.position.set( 0, 60, 50 );
+      light.castShadow = true;
+      light.shadow.camera.near = 0.1;
+      light.shadow.camera.far = 2000;
+      light.shadow.camera.top = 200;
+      light.shadow.camera.left = -50;
+      light.shadow.camera.right = 50;
+      renderer.scene.add(light);
+      // lightHelper = new THREE.DirectionalLightHelper( light );
+      // renderer.scene.add(lightHelper)
+    }
+    if($("#lighting").val() == "spot") {
+      light = new THREE.SpotLight( 0xffffff, 1 );
+      light.position.set( 0, 150, 40 );
+      light.castShadow = true;
+      light.angle = Math.PI / 4;
+      light.distance = 2000;
+      light.shadow.mapSize.width = 1024;
+      light.shadow.mapSize.height = 1024;
+      light.shadow.camera.near = 10;
+      light.shadow.camera.far = 2000;
+      renderer.scene.add(light);
+      // lightHelper = new THREE.SpotLightHelper( light );
+      // renderer.scene.add(lightHelper)
+    }
   }
   </script>
 </body>
